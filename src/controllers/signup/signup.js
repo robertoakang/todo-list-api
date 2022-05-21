@@ -31,7 +31,7 @@ class SingupController {
       const account = await this.accountService.add({ name, email, password })
       const payload = { id: account.id, name, email }
       const tokens = this.authenticationService.generateTokens(payload)
-      return okCreated(tokens)
+      return okCreated({ ...tokens, name })
     } catch (error) {
       console.error(error)
       return serverError()
