@@ -1,5 +1,6 @@
 const SingupController = require('./signup')
 const { MissingParamError, InvalidParamError, ServerError } = require('../../errors')
+// const { okCreated } = require('../../helpers/http/http-helper')
 
 const makeFakeRequest = () => ({
   body: {
@@ -11,10 +12,14 @@ const makeFakeRequest = () => ({
 })
 
 const makeFakeAccount = () => ({
-  id: 'valid_id',
-  name: 'any_name',
-  email: 'any_email'
+  id: 'valid_id'
 })
+
+// const makeFakeReturn = () => ({
+//   name: 'any_name',
+//   token: 'any_token',
+//   refreshToken: 'any_refreshToken'
+// })
 
 const makeEmailValidatorStub = () => {
   class EmailValidatorStub {
@@ -36,14 +41,29 @@ const makeAccountServiceStub = () => {
   return new AccountStub()
 }
 
+const makeAuthenticationServiceStub = () => {
+  class AuthenticationService {
+    generateTokens ({ payload }) {
+      return {
+        token: 'any_token',
+        refreshToken: 'any_refreshToken'
+      }
+    }
+  }
+
+  return new AuthenticationService()
+}
+
 const makeSut = () => {
   const emailValidatorStub = makeEmailValidatorStub()
   const accountServiceStub = makeAccountServiceStub()
-  const sut = new SingupController(emailValidatorStub, accountServiceStub)
+  const authenticationServiceStub = makeAuthenticationServiceStub()
+  const sut = new SingupController(emailValidatorStub, accountServiceStub, authenticationServiceStub)
   return {
     sut,
     emailValidatorStub,
-    accountServiceStub
+    accountServiceStub,
+    authenticationServiceStub
   }
 }
 
@@ -172,4 +192,22 @@ describe('Signup Controller', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
   })
+
+  test('Should call AuthenticationService with correct values', async () => {
+    const { sut, authenticationServiceStub } = makeSut()
+    const addSpy = jest.spyOn(authenticationServiceStub, 'generateTokens')
+    await sut.handle(makeFakeRequest())
+    const payload = {
+      id: 'valid_id',
+      name: 'any_name',
+      email: 'any_email@mail.com'
+    }
+    expect(addSpy).toHaveBeenCalledWith(payload)
+  })
+
+  // test('Should returns 201 if an valid data is provided', async () => {
+  //   const { sut } = makeSut()
+  //   const httpResponse = await sut.handle(makeFakeRequest())
+  //   expect(httpResponse).toEqual(okCreated(makeFakeReturn()))
+  // })
 })
