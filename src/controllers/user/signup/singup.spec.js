@@ -36,6 +36,10 @@ const makeAccountServiceStub = () => {
     async add ({ name, email, password }) {
       return await new Promise(resolve => resolve(makeFakeAccount()))
     }
+
+    async findUserByEmail (email, password) {
+      return await new Promise(resolve => resolve(false))
+    }
   }
 
   return new AccountStub()
