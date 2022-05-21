@@ -4,8 +4,15 @@
   "description": "Roberto Arruda Kang",
   "main": "index.js",
   "scripts": {
+    "start": "node src/index.js",
+    "start:dev": "nodemon src/index.ts",
     "lint": "standard --fix",
-    "test": "jest"
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --coverage=false",
+    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test:unit": "npm test -- --watch -c jest-unit-config.js",
+    "test:integration": "npm test -- --watch -c jest-integration-config.js",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage=true"
   },
   "keywords": [],
   "author": "",
