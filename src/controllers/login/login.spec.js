@@ -1,6 +1,6 @@
 const LoginController = require('./login')
 const { MissingParamError, ServerError } = require('../../errors')
-const { unauthorized } = require('../../helpers/http/http-helper')
+const { unauthorized, ok } = require('../../helpers/http/http-helper')
 
 const makeFakeRequest = () => ({
   body: {
@@ -10,14 +10,15 @@ const makeFakeRequest = () => ({
 })
 
 const makeFakeAccount = () => ({
-  id: 'valid_id'
+  id: 'valid_id',
+  name: 'any_name'
 })
 
-// const makeFakeReturn = () => ({
-//   name: 'any_name',
-//   token: 'any_token',
-//   refreshToken: 'any_refreshToken'
-// })
+const makeFakeReturn = () => ({
+  name: 'any_name',
+  token: 'any_token',
+  refreshToken: 'any_refreshToken'
+})
 
 const makeAccountServiceStub = () => {
   class AccountStub {
@@ -95,17 +96,17 @@ describe('Login Controller', () => {
     expect(httpResponse.body).toEqual(new ServerError())
   })
 
-  // test('Should call AuthenticationService with correct values', async () => {
-  //   const { sut, authenticationServiceStub } = makeSut()
-  //   const addSpy = jest.spyOn(authenticationServiceStub, 'generateTokens')
-  //   await sut.handle(makeFakeRequest())
-  //   const payload = {
-  //     id: 'valid_id',
-  //     name: 'any_name',
-  //     email: 'any_email@mail.com'
-  //   }
-  //   expect(addSpy).toHaveBeenCalledWith(payload)
-  // })
+  test('Should call AuthenticationService with correct values', async () => {
+    const { sut, authenticationServiceStub } = makeSut()
+    const addSpy = jest.spyOn(authenticationServiceStub, 'generateTokens')
+    await sut.handle(makeFakeRequest())
+    const payload = {
+      id: 'valid_id',
+      name: 'any_name',
+      email: 'any_email@mail.com'
+    }
+    expect(addSpy).toHaveBeenCalledWith(payload)
+  })
 
   test('Should returns 500 if AuthenticationService throws', async () => {
     const { sut, authenticationServiceStub } = makeSut()
@@ -125,9 +126,9 @@ describe('Login Controller', () => {
     expect(httpResponse).toEqual(unauthorized())
   })
 
-  // test('Should returns 200 if an valid data is provided', async () => {
-  //   const { sut } = makeSut()
-  //   const httpResponse = await sut.handle(makeFakeRequest())
-  //   expect(httpResponse).toEqual(ok(makeFakeReturn()))
-  // })
+  test('Should returns 200 if an valid data is provided', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(ok(makeFakeReturn()))
+  })
 })
