@@ -2,15 +2,16 @@
 const MongoHandler = require('../../db/connection')
 const request = require('supertest')
 const app = require('../app')
+const User = require('../../db/models/User')
 
 describe('SignUp Routes', () => {
-  const mongoHandler = new MongoHandler(process.env.MONGO_URI, {
+  const mongoHandler = new MongoHandler(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
 
   beforeAll(() => {
-    mongoHandler.connect(process.env.MONGO_URL)
+    mongoHandler.connect()
   })
 
   afterAll(() => {
@@ -18,8 +19,7 @@ describe('SignUp Routes', () => {
   })
 
   beforeEach(async () => {
-    const accountCollection = mongoHandler.getCollection('User')
-    await accountCollection.deleteMany({})
+    await User.deleteMany({})
   })
 
   test('Should check the app', async () => {

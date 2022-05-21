@@ -1,27 +1,27 @@
 const AccountService = require('.')
 const MongoHandler = require('../../db/connection')
+const User = require('../../db/models/User')
 
 const makeSut = () => {
   return new AccountService()
 }
 
 describe('Account Service', () => {
-  const mongoHandler = new MongoHandler(process.env.MONGO_URI, {
+  const mongoHandler = new MongoHandler(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
 
-  beforeAll(async () => {
-    await mongoHandler.connect(process.env.MONGO_UR)
+  beforeAll(() => {
+    mongoHandler.connect()
   })
 
-  afterAll(async () => {
+  afterAll(() => {
     mongoHandler.disconnect()
   })
 
   beforeEach(async () => {
-    const accountCollection = mongoHandler.getCollection('User')
-    await accountCollection.deleteMany({})
+    await User.deleteMany({})
   })
 
   test('Should return an account on success', async () => {
