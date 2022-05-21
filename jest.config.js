@@ -4,7 +4,8 @@ module.exports = {
   testEnvironment: 'node',
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.js'
+    '<rootDir>/src/**/*.js',
+    '!<rootDir>/src/config/**'
   ],
   coverageProvider: 'v8'
 }
