@@ -1,6 +1,6 @@
 const SingupController = require('./signup')
 const { MissingParamError, InvalidParamError, ServerError } = require('../../errors')
-// const { okCreated } = require('../../helpers/http/http-helper')
+const { okCreated } = require('../../helpers/http/http-helper')
 
 const makeFakeRequest = () => ({
   body: {
@@ -15,11 +15,11 @@ const makeFakeAccount = () => ({
   id: 'valid_id'
 })
 
-// const makeFakeReturn = () => ({
-//   name: 'any_name',
-//   token: 'any_token',
-//   refreshToken: 'any_refreshToken'
-// })
+const makeFakeReturn = () => ({
+  name: 'any_name',
+  token: 'any_token',
+  refreshToken: 'any_refreshToken'
+})
 
 const makeEmailValidatorStub = () => {
   class EmailValidatorStub {
@@ -215,9 +215,9 @@ describe('Signup Controller', () => {
     expect(httpResponse.body).toEqual(new ServerError())
   })
 
-  // test('Should returns 201 if an valid data is provided', async () => {
-  //   const { sut } = makeSut()
-  //   const httpResponse = await sut.handle(makeFakeRequest())
-  //   expect(httpResponse).toEqual(okCreated(makeFakeReturn()))
-  // })
+  test('Should returns 201 if an valid data is provided', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(okCreated(makeFakeReturn()))
+  })
 })
