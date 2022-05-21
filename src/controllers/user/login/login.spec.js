@@ -38,6 +38,10 @@ const makeAuthenticationServiceStub = () => {
         refreshToken: 'any_refreshToken'
       }
     }
+
+    verifyRefresh (payload, refreshToken) {
+      return true
+    }
   }
 
   return new AuthenticationService()
@@ -158,5 +162,28 @@ describe('Login Controller', () => {
     const httpResponse = await sut.handleRefreshToken(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('refreshToken'))
+  })
+
+  test('Should returns 200 if an valid data is provided to handleRefreshToken', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        payload: {
+          id: 'valid_id',
+          name: 'any_name',
+          email: 'any_email@mail.com'
+        },
+        refreshToken: 'any_refresh_token'
+      }
+    }
+    const httpResponse = await sut.handleRefreshToken(httpRequest)
+    expect(httpResponse).toEqual(ok({
+      token: 'any_token',
+      payload: {
+        id: 'valid_id',
+        name: 'any_name',
+        email: 'any_email@mail.com'
+      }
+    }))
   })
 })
