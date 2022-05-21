@@ -1,8 +1,13 @@
 class SingupController {
   async handle (httpRequest) {
-    return {
-      body: new Error('Missing params: name'),
-      statusCode: 400
+    const requiredFields = ['name', 'email']
+    for (const field of requiredFields) {
+      if (!httpRequest.body[field]) {
+        return {
+          body: new Error(`Missing params: ${field}`),
+          statusCode: 400
+        }
+      }
     }
   }
 }

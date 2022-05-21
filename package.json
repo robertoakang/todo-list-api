@@ -8,7 +8,7 @@
     "start:dev": "nodemon src/index.ts",
     "lint": "standard --fix",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --coverage=false",
-    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test:verbose": "jest --passWithNoTests --runInBand --coverage=false",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "npm test -- --findRelatedTests",
