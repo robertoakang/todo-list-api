@@ -1,10 +1,11 @@
-const { badRequest, serverError } = require('../../helpers/http/http-helper')
+const { badRequest, serverError, okCreated } = require('../../helpers/http/http-helper')
 const { MissingParamError, InvalidParamError } = require('../../errors')
 
 class SingupController {
-  constructor (emailValidator, accountService) {
+  constructor (emailValidator, accountService, authenticationService) {
     this.emailValidator = emailValidator
     this.accountService = accountService
+    this.authenticationService = authenticationService
   }
 
   async handle (httpRequest) {
@@ -27,8 +28,10 @@ class SingupController {
         return badRequest(new InvalidParamError('email'))
       }
 
-      const account = this.accountService.add({ name, email, password })
-      return account
+      const account = await this.accountService.add({ name, email, password })
+      const payload = { id: account.id, name, email }
+      const tokens = this.authenticationService.generateTokens(payload)
+      return okCreated(tokens)
     } catch (error) {
       console.error(error)
       return serverError()
