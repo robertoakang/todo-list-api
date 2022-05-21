@@ -1,12 +1,12 @@
+const { badRequest } = require('../../helpers/http/http-helper')
+const { MissingParamError } = require('../../errors')
+
 class SingupController {
   async handle (httpRequest) {
     const requiredFields = ['name', 'email']
     for (const field of requiredFields) {
       if (!httpRequest.body[field]) {
-        return {
-          body: new Error(`Missing params: ${field}`),
-          statusCode: 400
-        }
+        return badRequest(new MissingParamError(field))
       }
     }
   }

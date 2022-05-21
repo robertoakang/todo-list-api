@@ -1,4 +1,5 @@
 const SingupController = require('./signup')
+const { MissingParamError } = require('../../errors')
 
 // const makeFakeRequest = () => ({
 //   body: {
@@ -21,7 +22,7 @@ describe('Signup Controller', () => {
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new Error('Missing params: name'))
+    expect(httpResponse.body).toEqual(new MissingParamError('name'))
   })
 
   test('Should returns 400 if no email is provided', async () => {
@@ -35,6 +36,6 @@ describe('Signup Controller', () => {
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new Error('Missing params: email'))
+    expect(httpResponse.body).toEqual(new MissingParamError('email'))
   })
 })
