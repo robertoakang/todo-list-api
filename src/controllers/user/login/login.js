@@ -31,6 +31,30 @@ class LoginController {
       return serverError()
     }
   }
+
+  async handleRefreshToken (httpRequest) {
+    try {
+      const requiredFields = ['payload', 'refreshToken']
+      for (const field of requiredFields) {
+        if (!httpRequest.body[field]) {
+          return badRequest(new MissingParamError(field))
+        }
+      }
+
+      const { payload, refreshToken } = httpRequest.body
+      const isValid = this.authenticationService.verifyRefresh(payload, refreshToken)
+
+      if (!isValid) {
+        return unauthorized()
+      }
+
+      const { token } = this.authenticationService.generateTokens(payload)
+      return ok({ token, payload })
+    } catch (error) {
+      console.error(error)
+      return serverError()
+    }
+  }
 }
 
 module.exports = LoginController

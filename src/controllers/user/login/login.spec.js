@@ -131,4 +131,16 @@ describe('Login Controller', () => {
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(ok(makeFakeReturn()))
   })
+
+  test('Should returns 400 if no payload is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        refreshToken: 'any_refresh_token'
+      }
+    }
+    const httpResponse = await sut.handleRefreshToken(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new MissingParamError('payload'))
+  })
 })
