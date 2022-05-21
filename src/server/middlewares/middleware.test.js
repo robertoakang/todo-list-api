@@ -21,8 +21,6 @@ describe('Middlewares', () => {
     await request(app)
       .get('/test_cors')
       .expect('access-control-allow-origin', '*')
-      .expect('access-control-allow-methods', '*')
-      .expect('access-control-allow-headers', '*')
   })
 
   test('Should return default content type as json', async () => {

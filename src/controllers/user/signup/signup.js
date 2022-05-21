@@ -28,6 +28,11 @@ class SingupController {
         return badRequest(new InvalidParamError('email'))
       }
 
+      const userExists = await this.accountService.findUserByEmail(email, password)
+      if (userExists) {
+        return badRequest(new Error('User already exists'))
+      }
+
       const user = await this.accountService.add({ name, email, password })
       const payload = { id: user.id, name, email }
       const tokens = this.authenticationService.generateTokens(payload)
