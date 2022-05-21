@@ -143,4 +143,20 @@ describe('Login Controller', () => {
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('payload'))
   })
+
+  test('Should returns 400 if no refreshToken is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        payload: {
+          id: 'valid_id',
+          name: 'any_name',
+          email: 'any_email@mail.com'
+        }
+      }
+    }
+    const httpResponse = await sut.handleRefreshToken(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new MissingParamError('refreshToken'))
+  })
 })
