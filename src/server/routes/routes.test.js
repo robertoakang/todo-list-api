@@ -22,6 +22,12 @@ describe('SignUp Routes', () => {
     await accountCollection.deleteMany({})
   })
 
+  test('Should check the app', async () => {
+    await request(app)
+      .get('/api/v1/healthcheck')
+      .expect(200)
+  })
+
   test('Should return an account on success', async () => {
     await request(app)
       .post('/api/v1/signup')
