@@ -1,4 +1,4 @@
-const { ServerError } = require('../../errors')
+const { ServerError, Unauthorized } = require('../../errors')
 
 exports.ok = (body) => ({
   statusCode: 200,
@@ -18,4 +18,9 @@ exports.badRequest = (error) => ({
 exports.serverError = () => ({
   statusCode: 500,
   body: new ServerError()
+})
+
+exports.unauthorized = () => ({
+  statusCode: 401,
+  body: new Unauthorized()
 })

@@ -11,6 +11,16 @@ class AccountService {
       password: hashedPassword
     })
   }
+
+  async findUserByEmail (email, password) {
+    const user = await User.findOne({ email })
+    if (user) {
+      const matchCompare = bcrypt.compareSync(password, user.password)
+      if (!matchCompare) return false
+      return user
+    }
+    return false
+  }
 }
 
 module.exports = AccountService

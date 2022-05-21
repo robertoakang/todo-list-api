@@ -1,6 +1,6 @@
 class ServerError extends Error {
   constructor () {
-    super('Internal server error')
+    super('Unauthorized')
     this.name = 'ServerError'
   }
 }

@@ -28,8 +28,8 @@ class SingupController {
         return badRequest(new InvalidParamError('email'))
       }
 
-      const account = await this.accountService.add({ name, email, password })
-      const payload = { id: account.id, name, email }
+      const user = await this.accountService.add({ name, email, password })
+      const payload = { id: user.id, name, email }
       const tokens = this.authenticationService.generateTokens(payload)
       return okCreated({ ...tokens, name })
     } catch (error) {
