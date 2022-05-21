@@ -1,14 +1,14 @@
 const SingupController = require('./signup')
-const { MissingParamError, InvalidParamError } = require('../../errors')
+const { MissingParamError, InvalidParamError, ServerError } = require('../../errors')
 
-// const makeFakeRequest = () => ({
-//   body: {
-//     name: 'any_name',
-//     email: 'any_email@mail.com',
-//     password: 'any_password',
-//     passwordConfirmation: 'any_password'
-//   }
-// })
+const makeFakeRequest = () => ({
+  body: {
+    name: 'any_name',
+    email: 'any_email@mail.com',
+    password: 'any_password',
+    passwordConfirmation: 'any_password'
+  }
+})
 
 const makeEmailValidatorStub = () => {
   class EmailValidatorStub {
@@ -115,5 +115,15 @@ describe('Signup Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('email'))
+  })
+
+  test('Should returns 500 if EmailValidator throws', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 })
