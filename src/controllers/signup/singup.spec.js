@@ -10,6 +10,12 @@ const makeFakeRequest = () => ({
   }
 })
 
+const makeFakeAccount = () => ({
+  id: 'valid_id',
+  name: 'any_name',
+  email: 'any_email'
+})
+
 const makeEmailValidatorStub = () => {
   class EmailValidatorStub {
     isValid (email) {
@@ -20,12 +26,24 @@ const makeEmailValidatorStub = () => {
   return new EmailValidatorStub()
 }
 
+const makeAccountServiceStub = () => {
+  class AccountStub {
+    async add ({ name, email, password }) {
+      return await new Promise(resolve => resolve(makeFakeAccount()))
+    }
+  }
+
+  return new AccountStub()
+}
+
 const makeSut = () => {
   const emailValidatorStub = makeEmailValidatorStub()
-  const sut = new SingupController(emailValidatorStub)
+  const accountServiceStub = makeAccountServiceStub()
+  const sut = new SingupController(emailValidatorStub, accountServiceStub)
   return {
     sut,
-    emailValidatorStub
+    emailValidatorStub,
+    accountServiceStub
   }
 }
 
@@ -132,5 +150,16 @@ describe('Signup Controller', () => {
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
     await sut.handle(makeFakeRequest())
     expect(isValidSpy).toHaveBeenCalledWith('any_email@mail.com')
+  })
+
+  test('Should call AddAccountService with correct values', async () => {
+    const { sut, accountServiceStub } = makeSut()
+    const addSpy = jest.spyOn(accountServiceStub, 'add')
+    await sut.handle(makeFakeRequest())
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
   })
 })
