@@ -205,6 +205,16 @@ describe('Signup Controller', () => {
     expect(addSpy).toHaveBeenCalledWith(payload)
   })
 
+  test('Should returns 500 if AuthenticationService throws', async () => {
+    const { sut, authenticationServiceStub } = makeSut()
+    jest.spyOn(authenticationServiceStub, 'generateTokens').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
   // test('Should returns 201 if an valid data is provided', async () => {
   //   const { sut } = makeSut()
   //   const httpResponse = await sut.handle(makeFakeRequest())
