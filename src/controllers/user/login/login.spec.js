@@ -1,6 +1,6 @@
 const LoginController = require('./login')
-const { MissingParamError, ServerError } = require('../../errors')
-const { unauthorized, ok } = require('../../helpers/http/http-helper')
+const { MissingParamError, ServerError } = require('../../../errors')
+const { unauthorized, ok } = require('../../../helpers/http/http-helper')
 
 const makeFakeRequest = () => ({
   body: {

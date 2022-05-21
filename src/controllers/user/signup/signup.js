@@ -1,5 +1,5 @@
-const { badRequest, serverError, okCreated } = require('../../helpers/http/http-helper')
-const { MissingParamError, InvalidParamError } = require('../../errors')
+const { badRequest, serverError, okCreated } = require('../../../helpers/http/http-helper')
+const { MissingParamError, InvalidParamError } = require('../../../errors')
 
 class SingupController {
   constructor (emailValidator, accountService, authenticationService) {

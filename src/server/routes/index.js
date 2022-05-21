@@ -13,5 +13,6 @@ router.get('/healthcheck', (req, res) => {
 
 router.post('/user/signup', adaptRoute(makeSignUpController()))
 router.post('/user/login', adaptRoute(makeLoginController()))
+router.post('/user/refresh', adaptRoute(makeLoginController()))
 
 module.exports = router

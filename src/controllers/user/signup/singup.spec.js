@@ -1,6 +1,6 @@
 const SingupController = require('./signup')
-const { MissingParamError, InvalidParamError, ServerError } = require('../../errors')
-const { okCreated } = require('../../helpers/http/http-helper')
+const { MissingParamError, InvalidParamError, ServerError } = require('../../../errors')
+const { okCreated } = require('../../../helpers/http/http-helper')
 
 const makeFakeRequest = () => ({
   body: {

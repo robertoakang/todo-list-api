@@ -1,4 +1,4 @@
-const LoginController = require('../../controllers/login/login')
+const LoginController = require('../../controllers/user/login/login')
 const AccountService = require('../../service/account')
 const AuthenticationService = require('../../service/authentication')
 

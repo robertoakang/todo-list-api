@@ -1,5 +1,5 @@
-const { badRequest, serverError, ok, unauthorized } = require('../../helpers/http/http-helper')
-const { MissingParamError } = require('../../errors')
+const { badRequest, serverError, ok, unauthorized } = require('../../../helpers/http/http-helper')
+const { MissingParamError } = require('../../../errors')
 
 class LoginController {
   constructor (accountService, authenticationService) {
