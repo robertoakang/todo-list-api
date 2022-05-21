@@ -1,4 +1,5 @@
 const express = require('express')
+const routes = require('../routes')
 
 function setupMiddlewares (app) {
   app.use(express.json())
@@ -9,6 +10,7 @@ function setupMiddlewares (app) {
     res.type('json')
     next()
   })
+  app.use('/api/v1', routes)
 }
 
 module.exports = setupMiddlewares
