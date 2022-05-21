@@ -5,7 +5,7 @@ exports.badRequest = (error) => ({
   body: error
 })
 
-exports.serverError = (error) => ({
+exports.serverError = () => ({
   statusCode: 500,
-  body: new ServerError(error.stack)
+  body: new ServerError()
 })
