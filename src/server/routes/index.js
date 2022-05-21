@@ -7,11 +7,11 @@ const router = new express.Router()
 
 router.get('/healthcheck', (req, res) => {
   res.json({
-    message: 'API v1.0.0'
+    message: 'API version 1.0.0'
   })
 })
 
-router.post('/signup', adaptRoute(makeSignUpController()))
-router.post('/login', adaptRoute(makeLoginController()))
+router.post('/user/signup', adaptRoute(makeSignUpController()))
+router.post('/user/login', adaptRoute(makeLoginController()))
 
 module.exports = router

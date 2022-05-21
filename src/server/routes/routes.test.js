@@ -25,7 +25,7 @@ describe('SignUp Routes', () => {
 
   test('Should register and return the tokens on success', async () => {
     await request(app)
-      .post('/api/v1/signup')
+      .post('/api/v1/user/signup')
       .send({
         name: 'Roberto',
         email: 'betoakang@gmail.com',
@@ -37,7 +37,7 @@ describe('SignUp Routes', () => {
 
   test('Should return the tokens on success', async () => {
     await request(app)
-      .post('/api/v1/login')
+      .post('/api/v1/user/login')
       .send({
         email: 'betoakang@gmail.com',
         password: '123'
