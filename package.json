@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node src/server.js",
     "start:dev": "nodemon src/server.js",
-    "lint": "standard --fix",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --coverage=false",
     "test:verbose": "jest --passWithNoTests --runInBand --coverage=false",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
@@ -27,7 +26,8 @@
     "husky": "^8.0.1",
     "jest": "^28.1.0",
     "lint-staged": "^12.4.1",
-    "supertest": "^6.2.3"
+    "supertest": "^6.2.3",
+    "@shelf/jest-mongodb": "^2.2.2"
   },
   "dependencies": {
     "dotenv": "^16.0.1",

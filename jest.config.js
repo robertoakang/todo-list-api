@@ -7,5 +7,6 @@ module.exports = {
     '<rootDir>/src/**/*.js',
     '!<rootDir>/src/config/**'
   ],
+  preset: '@shelf/jest-mongodb',
   coverageProvider: 'v8'
 }
