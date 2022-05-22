@@ -16,10 +16,6 @@ class MongoHandler {
   disconnect () {
     mongoose.disconnect()
   }
-
-  getCollection (collection) {
-    return mongoose.model(collection)
-  }
 }
 
 module.exports = MongoHandler

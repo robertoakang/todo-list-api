@@ -1,6 +1,16 @@
 const request = require('supertest')
 const app = require('../app')
 
+const makeAuthenticationServiceStub = () => {
+  class AuthenticationService {
+    verifyUserByJWT (token) {
+      return true
+    }
+  }
+
+  return new AuthenticationService()
+}
+
 describe('Middlewares', () => {
   test('Should parse body as json', async () => {
     app.post('/test_body_parser', (req, res) => {
@@ -42,5 +52,20 @@ describe('Middlewares', () => {
     await request(app)
       .get('/test_content_type_xml')
       .expect('content-type', /xml/)
+  })
+
+  test('Should return 500 if auth middleware throws', async () => {
+    const authenticationServiceStub = makeAuthenticationServiceStub()
+    jest.spyOn(authenticationServiceStub, 'verifyUserByJWT').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const verifyJwtFake = () => {
+      return authenticationServiceStub.verifyUserByJWT('any_token')
+    }
+    app.get('/any_route', verifyJwtFake, (req, res) => {
+      res.send('')
+    })
+
+    await request(app).get('/any_route').expect(500)
   })
 })
