@@ -17,6 +17,10 @@ class AuthenticationService {
     const decoded = jwt.verify(refreshToken, 'refreshSecret')
     return decoded.email === payload.email
   }
+
+  verifyUserByJWT (token) {
+    return jwt.verify(token, secretJwt)
+  }
 }
 
 module.exports = AuthenticationService
