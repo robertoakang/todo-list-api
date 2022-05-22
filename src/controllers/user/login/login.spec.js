@@ -1,5 +1,5 @@
 const LoginController = require('./login')
-const { MissingParamError, ServerError } = require('../../../errors')
+const { MissingParamError, ServerError, Unauthorized } = require('../../../errors')
 const { unauthorized, ok } = require('../../../helpers/http/http-helper')
 
 const makeFakeRequest = () => ({
@@ -162,6 +162,25 @@ describe('Login Controller', () => {
     const httpResponse = await sut.handleRefreshToken(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('refreshToken'))
+  })
+
+  test('Should returns 401 if refreshToken is invalid', async () => {
+    const { sut, authenticationServiceStub } = makeSut()
+    jest.spyOn(authenticationServiceStub, 'verifyRefresh').mockReturnValueOnce(false)
+
+    const httpRequest = {
+      body: {
+        payload: {
+          id: 'valid_id',
+          name: 'any_name',
+          email: 'any_email@mail.com'
+        },
+        refreshToken: 'any_refresh_token'
+      }
+    }
+    const httpResponse = await sut.handleRefreshToken(httpRequest)
+    expect(httpResponse.statusCode).toBe(401)
+    expect(httpResponse.body).toEqual(new Unauthorized())
   })
 
   test('Should returns 200 if an valid data is provided to handleRefreshToken', async () => {
