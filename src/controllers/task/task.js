@@ -18,7 +18,7 @@ class TaskController {
 
       const task = await this.taskService.create(httpRequest.body.name)
       await this.projectService.associateTask(task._id, httpRequest.body.projectId)
-      return okCreated({ message: 'Task created sucessfully' })
+      return okCreated({ message: 'Task successfully created' })
     } catch (error) {
       return serverError()
     }
@@ -27,7 +27,7 @@ class TaskController {
   async destroy (httpRequest) {
     try {
       await this.taskService.remove(httpRequest.params.id)
-      return ok({ message: 'Deleted task with success' })
+      return ok({ message: 'Task successfully deleted' })
     } catch (error) {
       return serverError()
     }

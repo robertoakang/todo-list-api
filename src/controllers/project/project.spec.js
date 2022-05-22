@@ -62,7 +62,7 @@ describe('Project Controller', () => {
     }
     const httpResponse = await sut.createProject(httpRequest)
     expect(httpResponse.statusCode).toBe(201)
-    expect(httpResponse.body).toEqual({ message: 'Project created sucessfully' })
+    expect(httpResponse.body).toEqual({ message: 'Project successfully created' })
   })
 
   test('Should returns 200 if get project successfuly', async () => {
@@ -88,7 +88,7 @@ describe('Project Controller', () => {
     }
     const httpResponse = await sut.destroy(httpRequest)
     expect(httpResponse.statusCode).toBe(200)
-    expect(httpResponse.body).toEqual({ message: 'Deleted project with success' })
+    expect(httpResponse.body).toEqual({ message: 'Project successfully deleted' })
   })
 
   test('Should returns 200 if get project by id successfuly', async () => {

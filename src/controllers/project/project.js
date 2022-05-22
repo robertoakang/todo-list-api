@@ -13,7 +13,7 @@ class ProjectController {
       }
 
       await this.projectService.create(httpRequest.body.name, httpRequest.user.id)
-      return okCreated({ message: 'Project created sucessfully' })
+      return okCreated({ message: 'Project successfully created' })
     } catch (error) {
       return serverError()
     }
@@ -31,7 +31,7 @@ class ProjectController {
   async destroy (httpRequest) {
     try {
       await this.projectService.remove(httpRequest.params.id)
-      return ok({ message: 'Deleted project with success' })
+      return ok({ message: 'Project successfully deleted' })
     } catch (error) {
       return serverError()
     }

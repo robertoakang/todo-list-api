@@ -87,7 +87,7 @@ describe('Task Controller', () => {
     }
     const httpResponse = await sut.createTask(httpRequest)
     expect(httpResponse.statusCode).toBe(201)
-    expect(httpResponse.body).toEqual({ message: 'Task created sucessfully' })
+    expect(httpResponse.body).toEqual({ message: 'Task successfully created' })
   })
 
   test('Should returns 200 if destroy task successfuly', async () => {
@@ -102,7 +102,7 @@ describe('Task Controller', () => {
     }
     const httpResponse = await sut.destroy(httpRequest)
     expect(httpResponse.statusCode).toBe(200)
-    expect(httpResponse.body).toEqual({ message: 'Deleted task with success' })
+    expect(httpResponse.body).toEqual({ message: 'Task successfully deleted' })
   })
 
   test('Should returns 400 if finished_at are not provided', async () => {
