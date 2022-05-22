@@ -1,5 +1,5 @@
 const ProjectController = require('./project')
-const { MissingParamError } = require('../../errors')
+const { MissingParamError, ServerError } = require('../../errors')
 
 const makeProjectServiceStub = () => {
   class ProjectServiceStub {
@@ -65,6 +65,22 @@ describe('Project Controller', () => {
     expect(httpResponse.body).toEqual({ message: 'Project successfully created' })
   })
 
+  test('Should returns 500 if created project throws', async () => {
+    const { sut, projectServiceStub } = makeSut()
+    jest.spyOn(projectServiceStub, 'create').mockImplementationOnce(() => (new Promise((resolve, reject) => reject(new Error()))))
+    const httpRequest = {
+      body: {
+        name: 'any_project'
+      },
+      user: {
+        id: 'any_id'
+      }
+    }
+    const httpResponse = await sut.createProject(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
   test('Should returns 200 if get project successfuly', async () => {
     const { sut } = makeSut()
     const httpRequest = {
@@ -74,6 +90,19 @@ describe('Project Controller', () => {
     }
     const httpResponse = await sut.getProjects(httpRequest)
     expect(httpResponse.statusCode).toBe(200)
+  })
+
+  test('Should returns 500 if get project throws', async () => {
+    const { sut, projectServiceStub } = makeSut()
+    jest.spyOn(projectServiceStub, 'findAllByUser').mockImplementationOnce(() => (new Promise((resolve, reject) => reject(new Error()))))
+    const httpRequest = {
+      user: {
+        id: 'any_id'
+      }
+    }
+    const httpResponse = await sut.getProjects(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('Should returns 200 if destroy project successfuly', async () => {
@@ -91,6 +120,22 @@ describe('Project Controller', () => {
     expect(httpResponse.body).toEqual({ message: 'Project successfully deleted' })
   })
 
+  test('Should returns 500 if destroy project throws', async () => {
+    const { sut, projectServiceStub } = makeSut()
+    jest.spyOn(projectServiceStub, 'remove').mockImplementationOnce(() => (new Promise((resolve, reject) => reject(new Error()))))
+    const httpRequest = {
+      params: {
+        id: 'any_id'
+      },
+      user: {
+        id: 'any_id'
+      }
+    }
+    const httpResponse = await sut.destroy(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
   test('Should returns 200 if get project by id successfuly', async () => {
     const { sut } = makeSut()
     const httpRequest = {
@@ -103,6 +148,23 @@ describe('Project Controller', () => {
     }
     const httpResponse = await sut.getProjectById(httpRequest)
     expect(httpResponse.statusCode).toBe(200)
+  })
+
+  test('Should returns 500 if get project by id throws', async () => {
+    const { sut, projectServiceStub } = makeSut()
+    jest.spyOn(projectServiceStub, 'findById').mockImplementationOnce(() => (new Promise((resolve, reject) => reject(new Error()))))
+    const httpRequest = {
+      params: {
+        id: 'any_id'
+      },
+      user: {
+        id: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.getProjectById(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('Should returns 200 if update project successfuly', async () => {
@@ -120,5 +182,25 @@ describe('Project Controller', () => {
     }
     const httpResponse = await sut.update(httpRequest)
     expect(httpResponse.statusCode).toBe(200)
+  })
+
+  test('Should returns 500 if update project throws', async () => {
+    const { sut, projectServiceStub } = makeSut()
+    jest.spyOn(projectServiceStub, 'updateById').mockImplementationOnce(() => (new Promise((resolve, reject) => reject(new Error()))))
+    const httpRequest = {
+      body: {
+        name: 'any_name'
+      },
+      params: {
+        id: 'any_id'
+      },
+      user: {
+        id: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.update(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 })
