@@ -183,6 +183,27 @@ describe('Login Controller', () => {
     expect(httpResponse.body).toEqual(new Unauthorized())
   })
 
+  test('Should returns 500 if throws', async () => {
+    const { sut, authenticationServiceStub } = makeSut()
+    jest.spyOn(authenticationServiceStub, 'verifyRefresh').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpRequest = {
+      body: {
+        payload: {
+          id: 'valid_id',
+          name: 'any_name',
+          email: 'any_email@mail.com'
+        },
+        refreshToken: 'any_refresh_token'
+      }
+    }
+
+    const httpResponse = await sut.handleRefreshToken(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
   test('Should returns 200 if an valid data is provided to handleRefreshToken', async () => {
     const { sut } = makeSut()
     const httpRequest = {
