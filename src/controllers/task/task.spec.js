@@ -1,5 +1,5 @@
 const TaskController = require('./task')
-const { MissingParamError } = require('../../errors')
+const { MissingParamError, ServerError } = require('../../errors')
 
 const makeProjectServiceStub = () => {
   class ProjectServiceStub {
@@ -90,6 +90,24 @@ describe('Task Controller', () => {
     expect(httpResponse.body).toEqual({ message: 'Task successfully created' })
   })
 
+  test('Should returns 500 if if created task throws', async () => {
+    const { sut, taskServiceStub } = makeSut()
+    jest.spyOn(taskServiceStub, 'create').mockImplementationOnce(() => (new Promise((resolve, reject) => reject(new Error()))))
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        projectId: 'any_project'
+      },
+      user: {
+        id: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.createTask(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
   test('Should returns 200 if destroy task successfuly', async () => {
     const { sut } = makeSut()
     const httpRequest = {
@@ -103,6 +121,23 @@ describe('Task Controller', () => {
     const httpResponse = await sut.destroy(httpRequest)
     expect(httpResponse.statusCode).toBe(200)
     expect(httpResponse.body).toEqual({ message: 'Task successfully deleted' })
+  })
+
+  test('Should returns 500 if if destroy task throws', async () => {
+    const { sut, taskServiceStub } = makeSut()
+    jest.spyOn(taskServiceStub, 'remove').mockImplementationOnce(() => (new Promise((resolve, reject) => reject(new Error()))))
+    const httpRequest = {
+      params: {
+        id: 'any_id'
+      },
+      user: {
+        id: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.destroy(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('Should returns 400 if finished_at are not provided', async () => {
@@ -157,5 +192,26 @@ describe('Task Controller', () => {
     }
     const httpResponse = await sut.finishTask(httpRequest)
     expect(httpResponse.statusCode).toBe(200)
+  })
+
+  test('Should returns 500 if if update task throws', async () => {
+    const { sut, taskServiceStub } = makeSut()
+    jest.spyOn(taskServiceStub, 'updateById').mockImplementationOnce(() => (new Promise((resolve, reject) => reject(new Error()))))
+    const httpRequest = {
+      body: {
+        finished_at: new Date(),
+        status: 2
+      },
+      params: {
+        id: 'any_id'
+      },
+      user: {
+        id: 'any_id'
+      }
+    }
+
+    const httpResponse = await sut.finishTask(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 })
