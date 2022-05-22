@@ -1,0 +1,25 @@
+version: '3.7'
+
+networks:
+  local:
+
+services:
+  db:
+    image: "mongo:latest"
+    ports:
+      - 27017:27017
+    restart: always
+    volumes:
+      - ./data:/data/db
+    networks:
+      - local
+  app:
+    build: .
+    ports:
+      - 5050:5050
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - local
