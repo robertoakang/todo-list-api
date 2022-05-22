@@ -27,7 +27,6 @@ class LoginController {
       const tokens = this.authenticationService.generateTokens(payload)
       return ok({ ...tokens, name: user.name })
     } catch (error) {
-      console.error(error)
       return serverError()
     }
   }
@@ -51,7 +50,6 @@ class LoginController {
       const { token } = this.authenticationService.generateTokens(payload)
       return ok({ token, payload })
     } catch (error) {
-      console.error(error)
       return serverError()
     }
   }
