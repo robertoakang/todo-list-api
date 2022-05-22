@@ -1,16 +1,12 @@
 const AccountService = require('.')
 const MongoHandler = require('../../db/connection')
-const User = require('../../db/models/User')
 
 const makeSut = () => {
   return new AccountService()
 }
 
 describe('Account Service', () => {
-  const mongoHandler = new MongoHandler(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+  const mongoHandler = new MongoHandler(process.env.MONGO_URL)
 
   beforeAll(() => {
     mongoHandler.connect()
@@ -18,10 +14,6 @@ describe('Account Service', () => {
 
   afterAll(() => {
     mongoHandler.disconnect()
-  })
-
-  beforeEach(async () => {
-    await User.deleteMany({})
   })
 
   test('Should return an account on success', async () => {
@@ -34,5 +26,28 @@ describe('Account Service', () => {
 
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()
+  })
+
+  test('Should return an user on success', async () => {
+    const sut = makeSut()
+    const request = {
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    }
+    const user = await sut.findUserByEmail(request.email, request.password)
+
+    expect(user).toBeTruthy()
+    expect(user.id).toBeTruthy()
+  })
+
+  test('Should return false on error', async () => {
+    const sut = makeSut()
+    const request = {
+      email: 'any_email@mail.com',
+      password: 'any_password_incorrect'
+    }
+    const user = await sut.findUserByEmail(request.email, request.password)
+
+    expect(user.id).toBeFalsy()
   })
 })
