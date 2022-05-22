@@ -219,6 +219,14 @@ describe('Signup Controller', () => {
     expect(httpResponse.body).toEqual(new ServerError())
   })
 
+  test('Should return 400 if user already exists', async () => {
+    const { sut, accountServiceStub } = makeSut()
+    jest.spyOn(accountServiceStub, 'findUserByEmail').mockReturnValueOnce(true)
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new Error('User already exists'))
+  })
+
   test('Should returns 201 if an valid data is provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
