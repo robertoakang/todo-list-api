@@ -18,6 +18,6 @@ exports.verifyUserJwt = (req, res, next) => {
   } catch (err) {
     return res
       .status(500)
-      .json({ status: 500, message: 'Token authentication failed' })
+      .json({ message: 'Token authentication failed' })
   }
 }

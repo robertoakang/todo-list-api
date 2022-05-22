@@ -7,20 +7,6 @@ class TaskService {
     })
   }
 
-  async findById (id, userId) {
-    const task = await Task.findOne({ _id: id }).populate([
-      { path: 'users', select: 'name', match: { _id: userId } },
-      {
-        path: 'tasks',
-        select: [
-          'name', 'finished_at', 'status'
-        ]
-      }
-    ]).select('-__v')
-
-    return task
-  }
-
   async updateById (id, name, finished_at, status) {
     return await Task.updateOne({
       _id: id
